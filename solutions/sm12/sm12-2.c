@@ -2,12 +2,12 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-
+#include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
 
 void copy_file(int in_fd, int out_fd) {
-    ssize_t r;
+    ssize_t r, t;
     char buffer[4096];
     /* 
     ssize_t read(int filedes, void *buf, size_t nbytes);
@@ -15,7 +15,7 @@ void copy_file(int in_fd, int out_fd) {
     or 0 if reached the end of file 
     or -1 if an error occured
     */
-    while ((r = read(in_fd, buffer, 4096)) > 0) {
+    while ((r = read(in_fd, buffer, sizeof(buffer))) > 0) {
         ssize_t w = 0;
         /*
         ssize_t write(int filedes, const void *buf, size_t nbytes);
@@ -23,7 +23,9 @@ void copy_file(int in_fd, int out_fd) {
         or -1 if an error occured
         */
         while (w != r) {
-            w += write(out_fd, buffer + w, r - w);
+            if ((t = write(out_fd, buffer + w, r - w)) == -1)
+                exit(1);
+            w += t;
         }
     }
 }
