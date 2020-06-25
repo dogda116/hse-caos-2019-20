@@ -388,5 +388,7 @@ void *realloc(void *oldptr, size_t newsize);
     data[size++] = newvalue;
 ```
 
+# 06-pointers, 07-function-pointers
+[Подробное изложение](https://github.com/hseos/hseos-course/blob/master/2018/07-function-pointers/README.md)
 
-
+# 08-asm1
